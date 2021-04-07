@@ -12,7 +12,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.fengxu-30338:fengxu-http:0.1.0'
+    implementation 'com.github.fengxu-30338:fengxu-http:0.1.1'
     
     // 如果您的安卓项目使用的版本小于8.0建议您添加如下依赖
    	implementation("com.squareup.okhttp3:okhttp:4.9.0")
