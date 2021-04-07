@@ -1,9 +1,6 @@
 package com.fengxu.http.proxy;
 
-import com.fengxu.http.FxFile;
-import com.fengxu.http.FxHeader;
-import com.fengxu.http.FxPath;
-import com.fengxu.http.FxQuery;
+import com.fengxu.http.*;
 import com.fengxu.http.exception.DataAccessException;
 
 import java.io.File;
@@ -17,12 +14,34 @@ import java.lang.annotation.Annotation;
  */
 abstract class AbstractHttpHandler implements IHttpHandler {
 
+
+    /**
+     * 获取指定参数类型或子类的位置
+     *
+     * @param  args 参数数组
+     * @return 参数索引,找不到则返回-1
+     * @Author 风珝
+     * @Date 2021/3/19 20:16
+     * @Version 1.0.0
+     */
+    protected int findParameterPos(Object[] args,Class<?> tClass){
+        if(args == null){
+            return -1;
+        }
+        for (int i = 0; i < args.length; i++) {
+            if(args[i] != null && tClass.isAssignableFrom(args[i].getClass())){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /**
      * 解析参数上的注解信息
      * @param httpProp 方法封装对象
      * @param parameterAnnotations  该参数上的所有注解信息
      * @param arg 该参数的值
-     * @return  是否被注解标注过
+     * @return  该参数是否被注解标注过
      * @Author 风珝
      * @Date 2021/3/25 18:34
      * @Version 1.0.0
@@ -67,6 +86,15 @@ abstract class AbstractHttpHandler implements IHttpHandler {
                 isParse = true;
                 continue;
             }
+            if(FxFilename.class.isAssignableFrom(annotation.getClass())){
+                // 该注解是FxFilename
+                if(!arg.getClass().equals(String.class)){
+                    throw new DataAccessException("filename mast be String");
+                }
+                httpProp.getFileProp().setFilename(String.valueOf(arg));
+                isParse = true;
+                continue;
+            }
             if(FxFile.class.isAssignableFrom(annotation.getClass())) {
                 // 该注解是FxFile
                 FxFile fxFile = (FxFile) annotation;
@@ -81,7 +109,7 @@ abstract class AbstractHttpHandler implements IHttpHandler {
                 }
                 if(arg.getClass().equals(byte[].class)){
                     // 当文件体为byte[]类型时，必须制定文件名
-                    if(fxFile.filename().isEmpty()){
+                    if(httpProp.getFileProp().getFilename()==null && fxFile.filename().isEmpty()){
                         throw new DataAccessException("filename cannot be empty");
                     }
                     httpProp.getFileProp().setBytes(fxFile.value(),fxFile.filename(),(byte[])arg);
@@ -92,27 +120,6 @@ abstract class AbstractHttpHandler implements IHttpHandler {
         }
 
         return isParse;
-    }
-
-    /**
-     * 获取指定参数类型或子类的位置
-     *
-     * @param  args 参数数组
-     * @return 参数索引,找不到则返回-1
-     * @Author 风珝
-     * @Date 2021/3/19 20:16
-     * @Version 1.0.0
-     */
-    protected int findParameterPos(Object[] args,Class<?> tClass){
-        if(args == null){
-            return -1;
-        }
-        for (int i = 0; i < args.length; i++) {
-            if(args[i] != null && tClass.isAssignableFrom(args[i].getClass())){
-                return i;
-            }
-        }
-        return -1;
     }
 
 }

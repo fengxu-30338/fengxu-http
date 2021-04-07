@@ -209,7 +209,7 @@ class HttpProp {
 
         public void setFile(String paramName, File file) {
             this.paramName = paramName;
-            this.filename = file.getName();
+            setFilename(file.getName());
             this.file = file;
         }
 
@@ -219,7 +219,7 @@ class HttpProp {
 
         public void setBytes(String paramName,String filename,byte[] bytes) {
             this.paramName = paramName;
-            this.filename = filename;
+            setFilename(filename);
             this.bytes = bytes;
         }
 

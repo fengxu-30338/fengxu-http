@@ -274,6 +274,7 @@ public class HttpOkHandler extends AbstractHttpHandler {
                 continue;
             }
 
+            // 解析参数类型
             if(genericParameterTypes[i] instanceof ParameterizedType){
                 /***** 该参数是泛型类型 **********/
                 parseGenericParameter(httpProp,parameterTypes[i],genericParameterTypes[i], args[i]);

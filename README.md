@@ -214,3 +214,16 @@ pubExamInfo(request->{
 
 
 
+## 3.更新日志
+
+
+
+#### v 0.1.1更新日志@FxFilename
+
+增加@FxFilename注解，使得在传输文件时，可以在参数中动态传送文件名！
+
+```java
+@FxHttp(url = "https://img.coolcr.cn/api/upload",method = HttpMethod.POST)
+    String uploadFile(@FxFile(value = "image") File file, @FxFilename String filename);
+```
+
