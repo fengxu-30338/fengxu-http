@@ -86,16 +86,16 @@ System.out.println(res)
 
 该注解标注在http接口方法上，设置该方法的基本属性
 
-| @FxHttp中的属性 | 含义                                                         |
-| --------------- | ------------------------------------------------------------ |
-| value           | 配合baseUrl真正的url为 baseUrl + FxHttp.value()              |
-| url             | 或您想单独为该方法设置url只需要设置其url属性即可如@Fxhttp(url="http://xx.xx")，同时该注解中的value属性，也就失效了，不在配合baseUrl做为真实发送的url |
-| timeout         | 请求的超时时间，默认3000包括(连接超时和读取超时)             |
-| connectTimeout  | 连接超时时间，设置了该项会覆盖timeout                        |
-| readTimeout     | 读取超时时间，设置了该项会覆盖timeout                        |
-| method          | http方法类型(枚举值)如 GET,POST,PUT ...                      |
-| headers         | 固定请求头用" : "隔开如 {"token:asdffdg",""X-Requested-With:XMLHttpRequest""} |
-| throwable       | 发送请求或解析结果出错时，是否抛出异常,默认true,设置false则错误时，返回值为空 |
+| @FxHttp属性    | 含义                                                         |
+| -------------- | :----------------------------------------------------------- |
+| value          | 配合baseUrl真正的url为 baseUrl + FxHttp.value()              |
+| url            | 或您想单独为该方法设置url只需要设置其url属性即可如@Fxhttp(url="http://xx.xx ")，同时该注解中的value属性，也就失效了，不在配合baseUrl做为真实发送的url |
+| timeout        | 请求的超时时间，默认3000包括(连接超时和读取超时)             |
+| connectTimeout | 连接超时时间，设置了该项会覆盖timeout                        |
+| readTimeout    | 读取超时时间，设置了该项会覆盖timeout                        |
+| method         | http方法类型(枚举值)如 GET,POST,PUT ...                      |
+| headers        | 固定请求头用" : "隔开如 {"token:asdffdg",""X-Requested-With:XMLHttpRequest""} |
+| throwable      | 发送请求或解析结果出错时，是否抛出异常,默认true,设置false则错误时，返回值为空 |
 
 
 

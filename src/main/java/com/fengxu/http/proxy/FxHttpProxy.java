@@ -150,7 +150,7 @@ class FxHttpProxy implements InvocationHandler {
         try {
             Class.forName("okhttp3.OkHttpClient");
             this.httpHandler = HttpOkHandler.getInstance();
-            System.out.println("=============fxhttp V1.3.0----okhttp===============");
+            System.out.println("=============fxhttp V0.2.0----okhttp===============");
             return;
         } catch (ClassNotFoundException e) {
             // not use OkHttp
@@ -158,7 +158,7 @@ class FxHttpProxy implements InvocationHandler {
         try {
             Class.forName("cn.hutool.http.HttpRequest");
             this.httpHandler = HttpHuToolHandler.getInstance();
-            System.out.println("=============fxhttp V1.3.0----hutool================");
+            System.out.println("=============fxhttp V0.2.0----hutool================");
             return;
         } catch (ClassNotFoundException e) {
             // not use hutool
