@@ -1,5 +1,6 @@
 import com.alibaba.fastjson.JSONObject;
 import com.fengxu.http.proxy.FxHttpMain;
+import okhttp3.OkHttpClient;
 
 import java.io.File;
 import java.util.HashMap;
@@ -9,7 +10,15 @@ import java.util.Map;
 public class Test {
 
     public static void main(String[] args) throws Exception {
-        test1();
+        FxTest fxTest = new FxHttpMain.Builder().startLog(true)
+                .setInterceptor(fxHttpInterceptor -> {
+                    fxHttpInterceptor.addPattern("/api/*")
+                            .addForm("test","测试数据")
+                            .addHeader("token","token");
+                })
+                .build(FxTest.class);
+        String s = fxTest.login("风珝", "123321");
+        System.out.println(s);
     }
 
     private static void test4(){
@@ -19,14 +28,14 @@ public class Test {
     }
 
     private static void test3() throws Exception {
-        MusicHttp musicHttp = FxHttpMain.getProxy(MusicHttp.class);
+        MusicHttp musicHttp = new FxHttpMain.Builder().startLog(true).build(MusicHttp.class);
         String token = musicHttp.getToken("1964075703@qq.com", "123321abc");
         token = JSONObject.parseObject(token).get("data").toString();
         token = JSONObject.parseObject(token).getString("token");
 
         File file = new File("C:\\Users\\Administrator\\Pictures\\Camera Roll\\4984.jpg");
         System.out.println(file.exists());
-        String res = musicHttp.uploadFile(file,token);
+        String res = musicHttp.uploadFile(file,token,"1.png");
         System.out.println(res);
     }
 

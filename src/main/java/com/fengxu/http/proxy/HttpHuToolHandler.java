@@ -64,6 +64,9 @@ class HttpHuToolHandler extends AbstractHttpHandler {
         // 解析参数
         parseMethodParamsToRequest(httpProp,args);
 
+        // 执行拦截器
+        httpProp.execInterceptor();
+
         // 构建请求参数
         HttpRequest httpRequest = buildRequest(httpProp);
 

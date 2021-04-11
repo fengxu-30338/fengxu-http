@@ -1,12 +1,15 @@
 package com.fengxu.http.proxy;
 
 import com.fengxu.http.FxHttp;
+import org.ietf.jgss.Oid;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * 保存Http接口方法中的属性
@@ -16,7 +19,7 @@ import java.util.Map;
  */
 class HttpProp {
 
-    // 为解析动态路由前的Url
+    // 未解析动态路由前的Url
     private String sourceUrl;
 
     // 解析后的目的Url
@@ -43,9 +46,17 @@ class HttpProp {
     // 是否开启日志打印
     private boolean canOutLog = false;
 
-    public HttpProp(Method method, FxHttp fxHttp) {
+    // http拦截器
+    private FxHttpInterceptor interceptor;
+
+    public HttpProp(Method method, FxHttp fxHttp, FxHttpInterceptor interceptor) {
         this.method = method;
         this.fxHttp = fxHttp;
+        this.interceptor = interceptor;
+    }
+
+    public HttpProp(Method method, FxHttp fxHttp) {
+        this(method,fxHttp,new FxHttpInterceptor());
     }
 
     /**
@@ -80,6 +91,24 @@ class HttpProp {
             String log = String.format(" ===========>> \n Http(%s): %s \n header -> %s \n form -> %s \n body -> %s \n file -> %s \n ===========>>",
                     fxHttp.method().name(), sendUrl, headers, params, body, fileProp);
             System.out.println(log);
+        }
+    }
+
+    /**
+     * 执行拦截器
+     *
+     * @Author 风珝
+     * @Date 2021/4/11 15:53
+     * @Version 1.0.0
+     */
+    public void execInterceptor(){
+        for (Pattern pattern : interceptor.getPatternList()) {
+            if(pattern.matcher(this.sendUrl).find()){
+                // 成功匹配
+                this.addHeader(interceptor.getHeaders());
+                this.addForm(interceptor.getForms());
+                break;
+            }
         }
     }
 

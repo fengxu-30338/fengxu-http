@@ -18,5 +18,5 @@ public interface MusicHttp {
     String getToken(@FxQuery("email") String email,@FxQuery("password")String pwd);
 
     @FxHttp(url = "https://img.coolcr.cn/api/upload",method = HttpMethod.POST)
-    String uploadFile(@FxFile(value = "image") File file, @FxHeader("token") String token);
+    String uploadFile(@FxFile(value = "image") File file, @FxHeader("token") String token, @FxFilename String name);
 }

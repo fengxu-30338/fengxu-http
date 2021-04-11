@@ -72,7 +72,8 @@ public class HttpOkHandler extends AbstractHttpHandler {
                     public boolean verify(String s, SSLSession sslSession) {
                         return true;
                     }
-                }).callTimeout(fxHttp.timeout(), TimeUnit.MILLISECONDS)
+                })
+                .callTimeout(fxHttp.timeout(), TimeUnit.MILLISECONDS)
                 .proxy(Proxy.NO_PROXY);
         if(fxHttp.connectTimeout() > 0){
             builder.readTimeout(fxHttp.connectTimeout(),TimeUnit.MILLISECONDS);
@@ -96,7 +97,9 @@ public class HttpOkHandler extends AbstractHttpHandler {
     @Override
     public Object parseHttpRequest(HttpProp httpProp, Object[] args) {
         OkHttpClient okHttpClient;
-        if(args!= null && args[0].getClass().equals(OkHttpClient.class)){
+
+        // 第一个参数若是OkHttpClient则采用用户自定义client
+        if(args!= null && args[0] instanceof OkHttpClient){
             okHttpClient = (OkHttpClient) args[0];
         } else {
             okHttpClient = defaultOkHttpClient(httpProp.getFxHttp());
@@ -104,6 +107,9 @@ public class HttpOkHandler extends AbstractHttpHandler {
 
         // 处理方法参数,注解参数，附加值请求中，获取请求体和form表单数据
         parseMethodArgs(httpProp, args);
+
+        // 执行拦截器
+        httpProp.execInterceptor();
 
         // 构建请求对象
         Request request = buildRequest(httpProp);

@@ -11,7 +11,7 @@ java{
 }
 
 group = "com.github.fengxu-http"
-version = "0.1.1"
+version = "0.2.0"
 
 repositories {
     maven("https://jitpack.io")

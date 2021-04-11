@@ -7,7 +7,7 @@ import java.util.Map;
 
  interface FxTest {
 
-    String baseUrl = "http://8.131.71.174";
+    String baseUrl = "http://192.168.0.102:8000";
 
     @FxHttp(value = "/user/t")
     String login();
@@ -17,6 +17,9 @@ import java.util.Map;
 
     @FxHttp(value = "/api/user/login",method = HttpMethod.POST,timeout = 5000)
     String getUser(Map<String,Object> params);
+
+    @FxHttp(value = "/api/user/login",method = HttpMethod.POST,timeout = 5000)
+    String login(@FxQuery("username") String user,@FxQuery("password")  String password);
 
     @FxHttp(value = "/api/prom/query",method = HttpMethod.POST)
     String getProm(Map<String,Object> params, Map<String,String> headers);

@@ -12,7 +12,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.fengxu-30338:fengxu-http:0.1.1'
+    implementation 'com.github.fengxu-30338:fengxu-http:0.2.0'
     
     // 如果您的安卓项目使用的版本小于8.0建议您添加如下依赖
    	implementation("com.squareup.okhttp3:okhttp:4.9.0")
@@ -89,7 +89,7 @@ System.out.println(res)
 | @FxHttp中的属性 | 含义                                                         |
 | --------------- | ------------------------------------------------------------ |
 | value           | 配合baseUrl真正的url为 baseUrl + FxHttp.value()              |
-| url             | 或您想单独为该方法设置url只需要设置其url属性即可如@Fxhttp(url="http://xx.xx") |
+| url             | 或您想单独为该方法设置url只需要设置其url属性即可如@Fxhttp(url="http://xx.xx")，同时该注解中的value属性，也就失效了，不在配合baseUrl做为真实发送的url |
 | timeout         | 请求的超时时间，默认3000包括(连接超时和读取超时)             |
 | connectTimeout  | 连接超时时间，设置了该项会覆盖timeout                        |
 | readTimeout     | 读取超时时间，设置了该项会覆盖timeout                        |
@@ -218,12 +218,34 @@ pubExamInfo(request->{
 
 
 
-#### v 0.1.1更新日志@FxFilename
+#### v0.1.1更新日志@FxFilename
 
 增加@FxFilename注解，使得在传输文件时，可以在参数中动态传送文件名！
 
 ```java
 @FxHttp(url = "https://img.coolcr.cn/api/upload",method = HttpMethod.POST)
     String uploadFile(@FxFile(value = "image") File file, @FxFilename String filename);
+```
+
+
+
+#### v0.2.0更新日志-添加拦截器
+
+用户可以在构建代理对象时，设置拦截器，拦截器匹配@FxHttp注解中的value属性，也就是如果您是以url的形式指定请求路径的，那么匹配规则将失效，但可以通过同时存在url和value属性时来使其能够被拦截器匹配到，因为您设置了url属性后，将不会使用value属性作为请求路径！
+
+```java
+FxTest fxTest = new FxHttpMain.Builder().startLog(true)
+    			// 设置拦截器
+                .setInterceptor(fxHttpInterceptor -> {
+                    // 添加匹配规则（正则表达式）
+                    fxHttpInterceptor.addPattern("/api/*")
+                            // 为所有匹配规则的请求都增加表单参数项
+                            .addForm("test","测试数据")
+                        	// 为所有匹配规则的请求都增加请求头参数
+                            .addHeader("token","token");
+                })
+                .build(FxTest.class);
+        String s = fxTest.login("风珝", "123321");
+        System.out.println(s);
 ```
 

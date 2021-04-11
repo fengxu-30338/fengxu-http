@@ -23,6 +23,9 @@ class FxHttpProxy implements InvocationHandler {
     // 是否输出日志
     private boolean canOutLog = false;
 
+    // fxHttp拦截器
+    private FxHttpInterceptor interceptor = new FxHttpInterceptor();
+
     // 方法映射存储列表
     private List<HttpProp> httpPropList = new ArrayList<>();
 
@@ -119,7 +122,7 @@ class FxHttpProxy implements InvocationHandler {
             method.setAccessible(true);
             if(method.isAnnotationPresent(FxHttp.class)){
                 FxHttp fxHttp = method.getAnnotation(FxHttp.class);
-                HttpProp httpProp = new HttpProp(method,fxHttp);
+                HttpProp httpProp = new HttpProp(method,fxHttp,interceptor);
                 httpProp.setCanOutLog(this.canOutLog);
                 if(fxHttp.url().isEmpty()){
                     httpProp.setSourceUrl(this.baseURl + fxHttp.value());
@@ -174,6 +177,19 @@ class FxHttpProxy implements InvocationHandler {
      */
     public void startLog(){
         this.canOutLog = true;
+    }
+
+
+    /**
+     * 获取Http拦截器
+     *
+     * @return fxHttp拦截器
+     * @Author 风珝
+     * @Date 2021/4/11 15:40
+     * @Version 1.0.0
+     */
+    public FxHttpInterceptor getInterceptor() {
+        return interceptor;
     }
 }
 
