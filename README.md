@@ -12,7 +12,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.fengxu-30338:fengxu-http:0.2.0'
+    implementation 'com.github.fengxu-30338:fengxu-http:0.2.1'
     
     // 如果您的安卓项目使用的版本小于8.0建议您添加如下依赖
    	implementation("com.squareup.okhttp3:okhttp:4.9.0")
@@ -248,4 +248,12 @@ FxTest fxTest = new FxHttpMain.Builder().startLog(true)
         String s = fxTest.login("风珝", "123321");
         System.out.println(s);
 ```
+
+
+
+#### v0.2.1 更新日志-更新拦截器
+
+更新了拦截器可以获取到请求方法的参数和请求头，但是只有在匹配到时，对其作出的改变才会应用到请求上，也就是每次拦截器中都能拿到请求参数的副本，只有在正确匹配时，该副本才会应用到原来的请求上！
+
+其次，修复了不影响使用的小bug,优化了代码！
 

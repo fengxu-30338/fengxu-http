@@ -52,7 +52,7 @@ public class FxHttpMain {
          * @param action 函数式接口设置拦截器行为
          */
         public Builder setInterceptor(Consumer<FxHttpInterceptor> action){
-            action.accept(fxHttpProxy.getInterceptor());
+            fxHttpProxy.setInterceptorAction(action);
             return this;
         }
 

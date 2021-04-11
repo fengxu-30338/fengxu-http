@@ -1,18 +1,17 @@
 import com.alibaba.fastjson.JSONObject;
 import com.fengxu.http.proxy.FxHttpMain;
-import okhttp3.OkHttpClient;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class Test {
 
     public static void main(String[] args) throws Exception {
-        FxTest fxTest = new FxHttpMain.Builder().startLog(true)
+        FxTest fxTest = new FxHttpMain.Builder()
+                .baseUrl("http://8.131.71.175")
+                .startLog(true)
                 .setInterceptor(fxHttpInterceptor -> {
-                    fxHttpInterceptor.addPattern("/api/*")
+                    fxHttpInterceptor.addPattern("/b")
                             .addForm("test","测试数据")
                             .addHeader("token","token");
                 })

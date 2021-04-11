@@ -9,6 +9,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 /**
@@ -49,6 +51,9 @@ class HttpProp {
     // http拦截器
     private FxHttpInterceptor interceptor;
 
+    // 拦截器行为
+    private Consumer<FxHttpInterceptor> interceptorAction = null;
+
     public HttpProp(Method method, FxHttp fxHttp, FxHttpInterceptor interceptor) {
         this.method = method;
         this.fxHttp = fxHttp;
@@ -57,6 +62,23 @@ class HttpProp {
 
     public HttpProp(Method method, FxHttp fxHttp) {
         this(method,fxHttp,new FxHttpInterceptor());
+    }
+
+
+    /**
+     * 初始化属性，清除上一次残留数据
+     *
+     * @Author 风珝
+     * @Date 2021/4/11 22:32
+     * @Version 1.0.0
+     */
+    public void initProp(){
+        this.interceptor = new FxHttpInterceptor();
+        this.sendUrl = sourceUrl;
+        this.params.clear();
+        this.headers.clear();
+        this.body = null;
+        this.fileProp = new FileProp();
     }
 
     /**
@@ -102,12 +124,17 @@ class HttpProp {
      * @Version 1.0.0
      */
     public void execInterceptor(){
-        for (Pattern pattern : interceptor.getPatternList()) {
-            if(pattern.matcher(this.sendUrl).find()){
-                // 成功匹配
-                this.addHeader(interceptor.getHeaders());
-                this.addForm(interceptor.getForms());
-                break;
+        if(interceptorAction != null){
+            interceptor.forms.putAll(params);
+            interceptor.headers.putAll(headers);
+            interceptorAction.accept(interceptor);
+            for (Pattern pattern : interceptor.patternList) {
+                if(pattern.matcher(this.sendUrl).find()){
+                    // 成功匹配
+                    this.addForm(interceptor.forms);
+                    this.addHeader(interceptor.headers);
+                    break;
+                }
             }
         }
     }
@@ -197,6 +224,10 @@ class HttpProp {
 
     public void setCanOutLog(boolean canOutLog) {
         this.canOutLog = canOutLog;
+    }
+
+    public void setInterceptorAction(Consumer<FxHttpInterceptor> interceptorAction) {
+        this.interceptorAction = interceptorAction;
     }
 
     public FileProp getFileProp() {

@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * 动态代理生成类
@@ -23,8 +24,8 @@ class FxHttpProxy implements InvocationHandler {
     // 是否输出日志
     private boolean canOutLog = false;
 
-    // fxHttp拦截器
-    private FxHttpInterceptor interceptor = new FxHttpInterceptor();
+    // 拦截器行为
+    private Consumer<FxHttpInterceptor> interceptorAction = null;
 
     // 方法映射存储列表
     private List<HttpProp> httpPropList = new ArrayList<>();
@@ -105,6 +106,7 @@ class FxHttpProxy implements InvocationHandler {
         if(httpProp == null){
             throw new IllegalArgumentException("The @FxHttp annotation is not used in this method");
         }
+        httpProp.initProp();
         return httpHandler.parseHttpRequest(httpProp,args);
     }
 
@@ -122,7 +124,8 @@ class FxHttpProxy implements InvocationHandler {
             method.setAccessible(true);
             if(method.isAnnotationPresent(FxHttp.class)){
                 FxHttp fxHttp = method.getAnnotation(FxHttp.class);
-                HttpProp httpProp = new HttpProp(method,fxHttp,interceptor);
+                HttpProp httpProp = new HttpProp(method,fxHttp);
+                httpProp.setInterceptorAction(interceptorAction);
                 httpProp.setCanOutLog(this.canOutLog);
                 if(fxHttp.url().isEmpty()){
                     httpProp.setSourceUrl(this.baseURl + fxHttp.value());
@@ -150,7 +153,7 @@ class FxHttpProxy implements InvocationHandler {
         try {
             Class.forName("okhttp3.OkHttpClient");
             this.httpHandler = HttpOkHandler.getInstance();
-            System.out.println("=============fxhttp V0.2.0----okhttp===============");
+            System.out.println("=============fxhttp V0.2.1----okhttp===============");
             return;
         } catch (ClassNotFoundException e) {
             // not use OkHttp
@@ -158,7 +161,7 @@ class FxHttpProxy implements InvocationHandler {
         try {
             Class.forName("cn.hutool.http.HttpRequest");
             this.httpHandler = HttpHuToolHandler.getInstance();
-            System.out.println("=============fxhttp V0.2.0----hutool================");
+            System.out.println("=============fxhttp V0.2.1----hutool================");
             return;
         } catch (ClassNotFoundException e) {
             // not use hutool
@@ -188,8 +191,8 @@ class FxHttpProxy implements InvocationHandler {
      * @Date 2021/4/11 15:40
      * @Version 1.0.0
      */
-    public FxHttpInterceptor getInterceptor() {
-        return interceptor;
+    public void setInterceptorAction(Consumer<FxHttpInterceptor> action) {
+        this.interceptorAction = action;
     }
 }
 

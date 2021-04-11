@@ -19,14 +19,13 @@ import java.util.regex.Pattern;
 public class FxHttpInterceptor {
 
     // 正则规则列表
-    private List<Pattern> patternList = new ArrayList<>();
+    protected List<Pattern> patternList = new ArrayList<>();
 
     // 请求头
-    private Map<String,String> headers = new HashMap<>();
+    protected Map<String,String> headers = new HashMap<>();
 
     // 请求表单
-    private Map<String,Object> forms = new HashMap<>();
-
+    protected Map<String,Object> forms = new HashMap<>();
 
     /**
      * 添加正则匹配参数
@@ -114,15 +113,28 @@ public class FxHttpInterceptor {
         return this;
     }
 
-    protected List<Pattern> getPatternList() {
-        return patternList;
-    }
 
-    protected Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    protected Map<String, Object> getForms() {
+    /**
+     * 获取拦截到的请求表单
+     *
+     * @return 请求表单
+     * @Author 风珝
+     * @Date 2021/4/11 22:47
+     * @Version 1.0.0
+     */
+    public Map<String,Object> getForm(){
         return forms;
+    }
+
+    /**
+     * 获取拦截到的请求的请求头信息
+     *
+     * @return 请求表单
+     * @Author 风珝
+     * @Date 2021/4/11 22:47
+     * @Version 1.0.0
+     */
+    public Map<String,String> getHeader(){
+        return headers;
     }
 }
