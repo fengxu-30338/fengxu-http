@@ -2,11 +2,8 @@ package com.fengxu.http.proxy;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * http 拦截器，匹配特定规则请求，添加请求头，参数，配置规则依据@Fxhttp注解
@@ -18,41 +15,17 @@ import java.util.regex.Pattern;
  */
 public class FxHttpInterceptor {
 
-    // 正则规则列表
-    protected List<Pattern> patternList = new ArrayList<>();
-
     // 请求头
     protected Map<String,String> headers = new HashMap<>();
 
     // 请求表单
     protected Map<String,Object> forms = new HashMap<>();
 
-    /**
-     * 添加正则匹配参数
-     *
-     * @param  regex 正则表达式
-     * @Author 风珝
-     * @Date 2021/4/11 15:18
-     * @Version 1.0.0
-     */
-    public FxHttpInterceptor addPattern(@NotNull String... regex){
-        for (String r : regex) {
-            patternList.add(Pattern.compile(r));
-        }
-        return this;
-    }
+    protected FxHttpInterceptor(){}
 
-    /**
-     * 添加正则匹配参数
-     *
-     * @param  pattern 正则表达式对象
-     * @Author 风珝
-     * @Date 2021/4/11 15:18
-     * @Version 1.0.0
-     */
-    public FxHttpInterceptor addPattern(@NotNull Pattern pattern){
-        patternList.add(pattern);
-        return this;
+    protected FxHttpInterceptor(Map<String, String> headers, Map<String, Object> forms) {
+        this.headers = headers;
+        this.forms = forms;
     }
 
     /**

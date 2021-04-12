@@ -39,4 +39,7 @@ public @interface FxHttp {
     // 请求超时或者其他状况是否抛出异常，不抛出则返回null
     boolean throwable() default true;
 
+    // 是否匹配多个拦截器
+    boolean patterMore() default false;
+
 }

@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -52,16 +53,13 @@ class HttpProp {
     private FxHttpInterceptor interceptor;
 
     // 拦截器行为
-    private Consumer<FxHttpInterceptor> interceptorAction = null;
+    private Map<List<Pattern>, Consumer<FxHttpInterceptor>>  interceptorMap;
 
-    public HttpProp(Method method, FxHttp fxHttp, FxHttpInterceptor interceptor) {
-        this.method = method;
-        this.fxHttp = fxHttp;
-        this.interceptor = interceptor;
-    }
 
     public HttpProp(Method method, FxHttp fxHttp) {
-        this(method,fxHttp,new FxHttpInterceptor());
+        this.method = method;
+        this.fxHttp = fxHttp;
+        this.interceptor = new FxHttpInterceptor(headers,params);
     }
 
 
@@ -73,7 +71,6 @@ class HttpProp {
      * @Version 1.0.0
      */
     public void initProp(){
-        this.interceptor = new FxHttpInterceptor();
         this.sendUrl = sourceUrl;
         this.params.clear();
         this.headers.clear();
@@ -124,16 +121,13 @@ class HttpProp {
      * @Version 1.0.0
      */
     public void execInterceptor(){
-        if(interceptorAction != null){
-            interceptor.forms.putAll(params);
-            interceptor.headers.putAll(headers);
-            interceptorAction.accept(interceptor);
-            for (Pattern pattern : interceptor.patternList) {
+        out:for (Map.Entry<List<Pattern>, Consumer<FxHttpInterceptor>> entry : interceptorMap.entrySet()) {
+            for (Pattern pattern : entry.getKey()) {
                 if(pattern.matcher(this.sendUrl).find()){
-                    // 成功匹配
-                    this.addForm(interceptor.forms);
-                    this.addHeader(interceptor.headers);
-                    break;
+                    entry.getValue().accept(this.interceptor);
+                    if(fxHttp.patterMore() == false){
+                        break out;
+                    }
                 }
             }
         }
@@ -226,8 +220,8 @@ class HttpProp {
         this.canOutLog = canOutLog;
     }
 
-    public void setInterceptorAction(Consumer<FxHttpInterceptor> interceptorAction) {
-        this.interceptorAction = interceptorAction;
+    public void setInterceptorMap(Map<List<Pattern>, Consumer<FxHttpInterceptor>> interceptorMap) {
+        this.interceptorMap = interceptorMap;
     }
 
     public FileProp getFileProp() {

@@ -10,11 +10,14 @@ public class Test {
         FxTest fxTest = new FxHttpMain.Builder()
                 .baseUrl("http://8.131.71.175")
                 .startLog(true)
-                .setInterceptor(fxHttpInterceptor -> {
-                    fxHttpInterceptor.addPattern("/b")
-                            .addForm("test","测试数据")
-                            .addHeader("token","token");
-                })
+                .addInterceptor(fxHttpInterceptor -> {
+                    fxHttpInterceptor.addHeader("token","123324");
+                    System.out.println(fxHttpInterceptor.getForm());
+                },"/b")
+                .addInterceptor(fxHttpInterceptor -> {
+                    fxHttpInterceptor.addHeader("token2","qwwqewqe")
+                            .addForm("sign","b3c159af4edc4850bcb64fbab32d89df");
+                },"/api")
                 .build(FxTest.class);
         String s = fxTest.login("风珝", "123321");
         System.out.println(s);

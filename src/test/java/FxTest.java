@@ -18,7 +18,7 @@ import java.util.Map;
     @FxHttp(value = "/api/user/login",method = HttpMethod.POST,timeout = 5000)
     String getUser(Map<String,Object> params);
 
-    @FxHttp(value = "/api/user/login",method = HttpMethod.POST,timeout = 5000)
+    @FxHttp(value = "/api/user/login",method = HttpMethod.POST,timeout = 5000,patterMore = true)
     String login(@FxQuery("username") String user,@FxQuery("password")  String password);
 
     @FxHttp(value = "/api/prom/query",method = HttpMethod.POST)

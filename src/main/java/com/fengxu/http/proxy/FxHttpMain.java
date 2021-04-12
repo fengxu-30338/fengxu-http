@@ -3,7 +3,10 @@ package com.fengxu.http.proxy;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 /**
  * Http接口代理对象获取类
@@ -48,11 +51,30 @@ public class FxHttpMain {
         }
 
         /**
-         * 添加拦截器配置
-         * @param action 函数式接口设置拦截器行为
+         * 添加拦截器
+         *
+         * @param  action 拦截器回调
+         * @param  regex 正则表达式
+         * @Author 风珝
+         * @Date 2021/4/12 12:57
+         * @Version 1.0.0
          */
-        public Builder setInterceptor(Consumer<FxHttpInterceptor> action){
-            fxHttpProxy.setInterceptorAction(action);
+        public Builder addInterceptor(@NotNull Consumer<FxHttpInterceptor> action, String... regex) {
+            fxHttpProxy.addInterceptor(action,regex);
+            return this;
+        }
+
+        /**
+         * 添加拦截器
+         *
+         * @param  action 拦截器回调
+         * @param  patterns 正则表达式对象
+         * @Author 风珝
+         * @Date 2021/4/12 12:57
+         * @Version 1.0.0
+         */
+        public Builder addInterceptor(@NotNull Consumer<FxHttpInterceptor> action, Pattern... patterns) {
+            fxHttpProxy.addInterceptor(action,patterns);
             return this;
         }
 
