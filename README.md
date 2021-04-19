@@ -94,9 +94,9 @@ System.out.println(res)
 | connectTimeout | 连接超时时间，设置了该项会覆盖timeout                        |
 | readTimeout    | 读取超时时间，设置了该项会覆盖timeout                        |
 | method         | http方法类型(枚举值)如 GET,POST,PUT ...                      |
-| headers        | 固定请求头用" : "隔开如 {"token:asdffdg",""X-Requested-With:XMLHttpRequest""} |
-| throwable      | 发送请求或解析结果出错时，是否抛出异常,默认true,设置false则错误时，返回值为空 |
-| patterMore     | 是都在设置拦截器时，同时匹配多个拦截器，默认false            |
+| headers        | 固定请求头用" : "隔开如 {"token:asdffdg","X-Requested-With:XMLHttpRequest"} |
+| throwable      | 发送请求或解析结果出错时，是否抛出异常,默认true,设置false则错误时，返回值为null |
+| patterMore     | 是在设置多个拦截器时，能否同时匹配多个，默认false            |
 
 
 
@@ -140,6 +140,8 @@ String findByEmail(@FxHeader("token") String token, @FxQuery("email") String ema
 ```
 
 当参数被@FxFile指定时，参数可以有两种类型，File或byte[]  或您没有在@FxFile中指定filename的值，且参数类型为File那么文件名默认使用file.getName() 或您的参数是byte[]类型则必须指定filename否则抛出异常！
+
+注：在v0.1.1版本以后可以配合@FxFilename指定文件的文件名！
 
 
 
