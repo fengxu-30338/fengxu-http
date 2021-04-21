@@ -10,11 +10,12 @@ import java.security.cert.X509Certificate;
 
 /**
  * 获取信任所有证书的SSLSocketFactory
+ *
  * @Author 风珝
  * @Date 2021/3/19 9:54
  * @Version 1.0.0
  */
-public class DefaultSSLSocketFactory{
+public class DefaultSSLSocketFactory {
 
     //获取这个SSLSocketFactory
     public static SSLSocketFactory getSSLSocketFactory() {
@@ -28,7 +29,7 @@ public class DefaultSSLSocketFactory{
     }
 
     // 获取X509TrustManager
-    public static X509TrustManager getX095TrustManager(){
+    public static X509TrustManager getX095TrustManager() {
         return new X509TrustManager() {
             @Override
             public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {

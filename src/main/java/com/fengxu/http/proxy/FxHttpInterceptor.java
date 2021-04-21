@@ -16,12 +16,13 @@ import java.util.Map;
 public class FxHttpInterceptor {
 
     // 请求头
-    protected Map<String,String> headers = new HashMap<>();
+    protected Map<String, String> headers = new HashMap<>();
 
     // 请求表单
-    protected Map<String,Object> forms = new HashMap<>();
+    protected Map<String, Object> forms = new HashMap<>();
 
-    protected FxHttpInterceptor(){}
+    protected FxHttpInterceptor() {
+    }
 
     protected FxHttpInterceptor(Map<String, String> headers, Map<String, Object> forms) {
         this.headers = headers;
@@ -31,14 +32,14 @@ public class FxHttpInterceptor {
     /**
      * 添加请求头
      *
-     * @param name 请求头的键
+     * @param name  请求头的键
      * @param value 请求头的值
      * @Author 风珝
      * @Date 2021/4/11 15:23
      * @Version 1.0.0
      */
-    public FxHttpInterceptor addHeader(@NotNull String name, @NotNull String value){
-        headers.put(name,value);
+    public FxHttpInterceptor addHeader(@NotNull String name, @NotNull String value) {
+        headers.put(name, value);
         return this;
     }
 
@@ -50,9 +51,9 @@ public class FxHttpInterceptor {
      * @Date 2021/4/11 15:23
      * @Version 1.0.0
      */
-    public FxHttpInterceptor addHeader(@NotNull Map<String,String> header){
+    public FxHttpInterceptor addHeader(@NotNull Map<String, String> header) {
         for (Map.Entry<String, String> entry : header.entrySet()) {
-            headers.put(entry.getKey(),entry.getValue());
+            headers.put(entry.getKey(), entry.getValue());
         }
         return this;
     }
@@ -60,14 +61,14 @@ public class FxHttpInterceptor {
     /**
      * 添加表单
      *
-     * @param name 参数名
+     * @param name  参数名
      * @param value 参数值
      * @Author 风珝
      * @Date 2021/4/11 15:23
      * @Version 1.0.0
      */
-    public FxHttpInterceptor addForm(@NotNull String name, @NotNull Object value){
-        forms.put(name,value);
+    public FxHttpInterceptor addForm(@NotNull String name, @NotNull Object value) {
+        forms.put(name, value);
         return this;
     }
 
@@ -79,9 +80,9 @@ public class FxHttpInterceptor {
      * @Date 2021/4/11 15:23
      * @Version 1.0.0
      */
-    public FxHttpInterceptor addForm(@NotNull Map<String,Object> form){
+    public FxHttpInterceptor addForm(@NotNull Map<String, Object> form) {
         for (Map.Entry<String, Object> entry : form.entrySet()) {
-            forms.put(entry.getKey(),entry.getValue());
+            forms.put(entry.getKey(), entry.getValue());
         }
         return this;
     }
@@ -95,7 +96,7 @@ public class FxHttpInterceptor {
      * @Date 2021/4/11 22:47
      * @Version 1.0.0
      */
-    public Map<String,Object> getForm(){
+    public Map<String, Object> getForm() {
         return forms;
     }
 
@@ -107,7 +108,7 @@ public class FxHttpInterceptor {
      * @Date 2021/4/11 22:47
      * @Version 1.0.0
      */
-    public Map<String,String> getHeader(){
+    public Map<String, String> getHeader() {
         return headers;
     }
 }

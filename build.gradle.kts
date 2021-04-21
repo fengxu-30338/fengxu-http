@@ -1,11 +1,11 @@
 plugins {
     java
 }
-apply{
+apply {
     plugin("com.github.dcendents.android-maven")
 }
 
-java{
+java {
     targetCompatibility = JavaVersion.VERSION_1_8
     sourceCompatibility = JavaVersion.VERSION_1_8
 }
@@ -29,12 +29,12 @@ dependencies {
 }
 
 buildscript {
-    repositories{
+    repositories {
         mavenLocal()
         jcenter()
         google()
     }
-    dependencies{
+    dependencies {
         classpath("com.github.dcendents:android-maven-gradle-plugin:1.5")
     }
 }

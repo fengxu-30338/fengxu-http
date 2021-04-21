@@ -2,6 +2,7 @@ package com.fengxu.http.proxy;
 
 import com.fengxu.http.FxHttp;
 import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
 
 /**
  * 动态代理生成类
+ *
  * @Author 风珝
  * @Date 2021/3/17 12:47
  * @Version 1.0.0
@@ -28,7 +30,7 @@ class FxHttpProxy implements InvocationHandler {
     private boolean canOutLog = false;
 
     // 拦截器行为
-    private Map<List<Pattern>, Consumer<FxHttpInterceptor>>  interceptorMap = new LinkedHashMap<>();
+    private Map<List<Pattern>, Consumer<FxHttpInterceptor>> interceptorMap = new LinkedHashMap<>();
 
     // 方法映射存储列表
     private List<HttpProp> httpPropList = new ArrayList<>();
@@ -40,28 +42,28 @@ class FxHttpProxy implements InvocationHandler {
     /**
      * 生成代理对象
      *
-     * @param  target 目标对象字节码
+     * @param target 目标对象字节码
      * @return 代理对象
      * @Author 风珝
      * @Date 2021/3/17 17:30
      * @Version 1.0.0
      */
-    public <T> T generateProxy(Class<T> target){
+    public <T> T generateProxy(Class<T> target) {
         try {
             Field baseUrl = target.getDeclaredField("baseUrl");
             baseUrl.setAccessible(true);
             Object fieldVal = baseUrl.get(target);
-            if(fieldVal instanceof String){
+            if (fieldVal instanceof String) {
                 this.baseURl = (String) fieldVal;
             } else {
                 throw new IllegalArgumentException("The value of baseurl you defined should be of string type!");
             }
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new RuntimeException(e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Failed to get baseurl");
         }
-        T t =  (T) Proxy.newProxyInstance(target.getClassLoader(),new Class[]{target},this);
+        T t = (T) Proxy.newProxyInstance(target.getClassLoader(), new Class[]{target}, this);
         this.selectHttpHandler();
         this.handlerMethod(target);
         return t;
@@ -70,16 +72,16 @@ class FxHttpProxy implements InvocationHandler {
     /**
      * 生成代理对象
      *
-     * @param  target 目标对象字节码
-     * @param  baseURl 设置基础URL
+     * @param target  目标对象字节码
+     * @param baseURl 设置基础URL
      * @return 代理对象
      * @Author 风珝
      * @Date 2021/3/17 17:30
      * @Version 1.0.0
      */
-    public <T> T generateProxy(Class<T> target, String baseURl){
+    public <T> T generateProxy(Class<T> target, String baseURl) {
         this.baseURl = baseURl;
-        T t =  (T) Proxy.newProxyInstance(target.getClassLoader(),new Class[]{target},this);
+        T t = (T) Proxy.newProxyInstance(target.getClassLoader(), new Class[]{target}, this);
         this.selectHttpHandler();
         this.handlerMethod(target);
         return t;
@@ -89,9 +91,9 @@ class FxHttpProxy implements InvocationHandler {
     /**
      * 代理方法处理逻辑
      *
-     * @param  proxy 代理对象
+     * @param proxy  代理对象
      * @param method 方法反射对象
-     * @param args 方法参数
+     * @param args   方法参数
      * @return
      * @Author 风珝
      * @Date 2021/3/19 14:37
@@ -100,37 +102,37 @@ class FxHttpProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         HttpProp httpProp = null;
-        for (HttpProp hp: httpPropList) {
-            if(hp.getMethod().equals(method)){
+        for (HttpProp hp : httpPropList) {
+            if (hp.getMethod().equals(method)) {
                 httpProp = hp;
                 break;
             }
         }
-        if(httpProp == null){
+        if (httpProp == null) {
             throw new IllegalArgumentException("The @FxHttp annotation is not used in this method");
         }
         httpProp.initProp();
-        return httpHandler.parseHttpRequest(httpProp,args);
+        return httpHandler.parseHttpRequest(httpProp, args);
     }
 
 
     /**
      * 获取代理接口中的所有被@FxHttp注解标注过的方法信息
      *
-     * @param  tClass 字节码类型
+     * @param tClass 字节码类型
      * @Author 风珝
      * @Date 2021/3/17 16:04
      * @Version 1.0.0
      */
-    private void handlerMethod(Class<?> tClass){
+    private void handlerMethod(Class<?> tClass) {
         for (Method method : tClass.getDeclaredMethods()) {
             method.setAccessible(true);
-            if(method.isAnnotationPresent(FxHttp.class)){
+            if (method.isAnnotationPresent(FxHttp.class)) {
                 FxHttp fxHttp = method.getAnnotation(FxHttp.class);
-                HttpProp httpProp = new HttpProp(method,fxHttp);
+                HttpProp httpProp = new HttpProp(method, fxHttp);
                 httpProp.setInterceptorMap(interceptorMap);
                 httpProp.setCanOutLog(this.canOutLog);
-                if(fxHttp.url().isEmpty()){
+                if (fxHttp.url().isEmpty()) {
                     httpProp.setSourceUrl(this.baseURl + fxHttp.value());
                 } else {
                     httpProp.setSourceUrl(fxHttp.url());
@@ -138,11 +140,10 @@ class FxHttpProxy implements InvocationHandler {
                 httpProp.copyToSendUrl();
                 this.httpPropList.add(httpProp);
             } else {
-                System.out.println(String.format("Method:%s will not be proxied",method.getName()));
+                System.out.println(String.format("Method:%s will not be proxied", method.getName()));
             }
         }
     }
-
 
 
     /**
@@ -152,7 +153,7 @@ class FxHttpProxy implements InvocationHandler {
      * @Date 2021/3/19 15:29
      * @Version 1.0.0
      */
-    private void selectHttpHandler(){
+    private void selectHttpHandler() {
         try {
             Class.forName("okhttp3.OkHttpClient");
             this.httpHandler = HttpOkHandler.getInstance();
@@ -169,7 +170,7 @@ class FxHttpProxy implements InvocationHandler {
         } catch (ClassNotFoundException e) {
             // not use hutool
         }
-        if(this.httpHandler == null){
+        if (this.httpHandler == null) {
             throw new RuntimeException("You did not import OkHttp or Hutool-http dependency");
         }
     }
@@ -181,7 +182,7 @@ class FxHttpProxy implements InvocationHandler {
      * @Date 2021/3/31 19:06
      * @Version 1.0.0
      */
-    public void startLog(){
+    public void startLog() {
         this.canOutLog = true;
     }
 
@@ -189,8 +190,8 @@ class FxHttpProxy implements InvocationHandler {
     /**
      * 添加拦截器
      *
-     * @param  action 拦截器回调
-     * @param  regex 正则表达式
+     * @param action 拦截器回调
+     * @param regex  正则表达式
      * @Author 风珝
      * @Date 2021/4/12 12:57
      * @Version 1.0.0
@@ -200,14 +201,14 @@ class FxHttpProxy implements InvocationHandler {
         for (String r : regex) {
             patterns.add(Pattern.compile(r));
         }
-        interceptorMap.put(patterns,action);
+        interceptorMap.put(patterns, action);
     }
 
     /**
      * 添加拦截器
      *
-     * @param  action 拦截器回调
-     * @param  patterns 正则表达式对象
+     * @param action   拦截器回调
+     * @param patterns 正则表达式对象
      * @Author 风珝
      * @Date 2021/4/12 12:57
      * @Version 1.0.0
@@ -217,7 +218,7 @@ class FxHttpProxy implements InvocationHandler {
         for (Pattern pattern : patterns) {
             patternList.add(pattern);
         }
-        interceptorMap.put(patternList,action);
+        interceptorMap.put(patternList, action);
     }
 }
 

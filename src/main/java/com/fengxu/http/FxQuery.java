@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 用于标注查询参数
+ *
  * @Author 风珝
  * @Date 2021/3/25 18:30
  * @Version 1.0.0

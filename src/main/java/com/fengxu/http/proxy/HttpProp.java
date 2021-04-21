@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 /**
  * 保存Http接口方法中的属性
+ *
  * @Author 风珝
  * @Date 2021/3/31 18:56
  * @Version 1.0.0
@@ -35,10 +36,10 @@ class HttpProp {
     private FxHttp fxHttp;
 
     // 请求头信息
-    private Map<String,String> headers = new HashMap<>();
+    private Map<String, String> headers = new HashMap<>();
 
     // 参数信息
-    private Map<String,Object> params = new HashMap<>();
+    private Map<String, Object> params = new HashMap<>();
 
     // 文件参数信息
     private FileProp fileProp = new FileProp();
@@ -53,13 +54,13 @@ class HttpProp {
     private FxHttpInterceptor interceptor;
 
     // 拦截器行为
-    private Map<List<Pattern>, Consumer<FxHttpInterceptor>>  interceptorMap;
+    private Map<List<Pattern>, Consumer<FxHttpInterceptor>> interceptorMap;
 
 
     public HttpProp(Method method, FxHttp fxHttp) {
         this.method = method;
         this.fxHttp = fxHttp;
-        this.interceptor = new FxHttpInterceptor(headers,params);
+        this.interceptor = new FxHttpInterceptor(headers, params);
     }
 
 
@@ -70,7 +71,7 @@ class HttpProp {
      * @Date 2021/4/11 22:32
      * @Version 1.0.0
      */
-    public void initProp(){
+    public void initProp() {
         this.sendUrl = sourceUrl;
         this.params.clear();
         this.headers.clear();
@@ -86,12 +87,12 @@ class HttpProp {
      * @Date 2021/3/31 19:02
      * @Version 1.0.0
      */
-    public String getParamsString(){
+    public String getParamsString() {
         StringBuilder sb = new StringBuilder("?");
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             sb.append(entry.getKey() + "=" + entry.getValue() + "&");
         }
-        if(sb.toString().equals("?")){
+        if (sb.toString().equals("?")) {
             return "";
         }
         sb.deleteCharAt(sb.length() - 1);
@@ -105,8 +106,8 @@ class HttpProp {
      * @Date 2021/3/31 22:10
      * @Version 1.0.0
      */
-    public void printLogIfCan(){
-        if(canOutLog){
+    public void printLogIfCan() {
+        if (canOutLog) {
             String log = String.format(" ===========>> \n Http(%s): %s \n header -> %s \n form -> %s \n body -> %s \n file -> %s \n ===========>>",
                     fxHttp.method().name(), sendUrl, headers, params, body, fileProp);
             System.out.println(log);
@@ -120,12 +121,13 @@ class HttpProp {
      * @Date 2021/4/11 15:53
      * @Version 1.0.0
      */
-    public void execInterceptor(){
-        out:for (Map.Entry<List<Pattern>, Consumer<FxHttpInterceptor>> entry : interceptorMap.entrySet()) {
+    public void execInterceptor() {
+        out:
+        for (Map.Entry<List<Pattern>, Consumer<FxHttpInterceptor>> entry : interceptorMap.entrySet()) {
             for (Pattern pattern : entry.getKey()) {
-                if(pattern.matcher(this.sendUrl).find()){
+                if (pattern.matcher(this.sendUrl).find()) {
                     entry.getValue().accept(this.interceptor);
-                    if(fxHttp.patterMore() == false){
+                    if (fxHttp.patterMore() == false) {
                         break out;
                     }
                 }
@@ -140,7 +142,7 @@ class HttpProp {
      * @Date 2021/3/31 19:31
      * @Version 1.0.0
      */
-    public void copyToSendUrl(){
+    public void copyToSendUrl() {
         this.sendUrl = this.sourceUrl;
     }
 
@@ -180,13 +182,13 @@ class HttpProp {
         return headers;
     }
 
-    public void addHeader(String name,String value) {
-        this.headers.put(name,value);
+    public void addHeader(String name, String value) {
+        this.headers.put(name, value);
     }
 
-    public void addHeader(Map<String,String> headers) {
+    public void addHeader(Map<String, String> headers) {
         for (Map.Entry<String, String> entry : headers.entrySet()) {
-            this.headers.put(entry.getKey(),entry.getValue());
+            this.headers.put(entry.getKey(), entry.getValue());
         }
     }
 
@@ -194,13 +196,13 @@ class HttpProp {
         return params;
     }
 
-    public void addForm(String name,Object value) {
-        this.params.put(name,value);
+    public void addForm(String name, Object value) {
+        this.params.put(name, value);
     }
 
-    public void addForm(Map<String,Object> params) {
+    public void addForm(Map<String, Object> params) {
         for (Map.Entry<String, Object> entry : params.entrySet()) {
-            this.params.put(entry.getKey(),entry.getValue());
+            this.params.put(entry.getKey(), entry.getValue());
         }
     }
 
@@ -230,11 +232,12 @@ class HttpProp {
 
     /**
      * 文件属性类
+     *
      * @Author 风珝
      * @Date 2021/3/31 19:59
      * @Version 1.0.0
      */
-    public class FileProp{
+    public class FileProp {
         // 表单参数名
         private String paramName;
         // 文件名
@@ -245,7 +248,7 @@ class HttpProp {
         private byte[] bytes;
 
         // 是否包含文件
-        public boolean containFile(){
+        public boolean containFile() {
             return file != null || bytes != null;
         }
 
@@ -271,7 +274,7 @@ class HttpProp {
             return bytes;
         }
 
-        public void setBytes(String paramName,String filename,byte[] bytes) {
+        public void setBytes(String paramName, String filename, byte[] bytes) {
             this.paramName = paramName;
             setFilename(filename);
             this.bytes = bytes;

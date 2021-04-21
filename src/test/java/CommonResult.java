@@ -6,7 +6,7 @@ public class CommonResult<T> implements Serializable {
     private T data;
 
     public CommonResult(Integer code, String message) {
-        this(code,message,null);
+        this(code, message, null);
     }
 
     public CommonResult(Integer code, String message, T data) {

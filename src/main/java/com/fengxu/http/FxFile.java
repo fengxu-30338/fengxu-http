@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 用于上传文件的注解
+ *
  * @Author 风珝
  * @Date 2021/3/27 21:50
  * @Version 1.0.0
@@ -15,5 +16,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FxFile {
     String value();
+
     String filename() default "";
 }

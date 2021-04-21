@@ -5,7 +5,7 @@ import com.fengxu.http.okhttpinterface.FxHttpCallback;
 import java.io.OutputStream;
 import java.util.Map;
 
- interface FxTest {
+interface FxTest {
 
     String baseUrl = "http://192.168.0.102:8000";
 
@@ -15,14 +15,14 @@ import java.util.Map;
     @FxHttp(value = "/api/pub/notice")
     String getNotice();
 
-    @FxHttp(value = "/api/user/login",method = HttpMethod.POST,timeout = 5000)
-    String getUser(Map<String,Object> params);
+    @FxHttp(value = "/api/user/login", method = HttpMethod.POST, timeout = 5000)
+    String getUser(Map<String, Object> params);
 
-    @FxHttp(value = "/api/user/login",method = HttpMethod.POST,timeout = 5000,patterMore = true)
-    String login(@FxQuery("username") String user,@FxQuery("password")  String password);
+    @FxHttp(value = "/api/user/login", method = HttpMethod.POST, timeout = 5000, patterMore = true)
+    String login(@FxQuery("username") String user, @FxQuery("password") String password);
 
-    @FxHttp(value = "/api/prom/query",method = HttpMethod.POST)
-    String getProm(Map<String,Object> params, Map<String,String> headers);
+    @FxHttp(value = "/api/prom/query", method = HttpMethod.POST)
+    String getProm(Map<String, Object> params, Map<String, String> headers);
 
     @FxHttp(value = "/api/pub/pic")
     OutputStream getPic();
@@ -31,7 +31,7 @@ import java.util.Map;
     byte[] getPic2();
 
     @FxHttp(value = "/api/user/regsend", method = HttpMethod.POST)
-    void register(Map<String,Object> params, FxHttpCallback callback);
+    void register(Map<String, Object> params, FxHttpCallback callback);
 
     @FxHttp(value = "/api/exam/pubexam/{page}", method = HttpMethod.POST)
     String pubExamInfo(@FxPath("page") Integer page, @FxHeader("token") String token);

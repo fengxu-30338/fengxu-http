@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 用于接口方法上的注解
+ *
  * @Author 风珝
  * @Date 2021/3/26 12:42
  * @Version 1.0.0
