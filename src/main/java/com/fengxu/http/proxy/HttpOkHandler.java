@@ -369,6 +369,9 @@ public class HttpOkHandler extends AbstractHttpHandler {
     private Object parseResult(Response response, Class<?> returnType, boolean throwable) {
         try {
             String res = null;
+            if (response == null){
+                return null;
+            }
             if (String.class.equals(returnType)) {
                 res = response.body().string();
                 return res;
