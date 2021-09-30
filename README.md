@@ -12,12 +12,12 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.fengxu-30338:fengxu-http:0.2.2'
+    implementation 'com.github.fengxu-30338:fengxu-http:0.2.3'
     
-    // 如果您的安卓项目使用的版本小于8.0建议您添加如下依赖
+    // 如果您是安卓项目建议您添加okhttp依赖
    	implementation("com.squareup.okhttp3:okhttp:4.9.0")
     
-    // 如果您的安卓项目大于等于8.0建议您添加hutool依赖
+    // 如果您是电脑项目建议您添加hutool依赖
     implementation("cn.hutool:hutool-http:5.6.0")
     
     /****hutool或okhttp必须选一个，如果都未选择则报错,多个则默认使用okhttp***/
@@ -32,7 +32,7 @@ dependencies {
 
 
 
-在安卓开发时，我们往往将http调用写在不同的页面中，这样代码耦合度过高且不易维护，fx-http就是为了解决这一问题而出现的！
+在开发时，我们往往将http调用写在不同的页面中，这样代码耦合度过高且不易维护，fx-http就是为了解决这一问题而出现的！
 
 
 
