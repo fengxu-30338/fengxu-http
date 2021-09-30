@@ -11,7 +11,7 @@ java {
 }
 
 group = "com.github.fengxu-http"
-version = "0.2.2"
+version = "0.2.3"
 
 repositories {
     maven("https://jitpack.io")
@@ -24,7 +24,6 @@ dependencies {
     compile("com.alibaba", "fastjson", "1.2.75")
     compileOnly("cn.hutool:hutool-http:5.6.0")
     compileOnly("com.squareup.okhttp3:okhttp:4.9.0")
-
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
 }
 

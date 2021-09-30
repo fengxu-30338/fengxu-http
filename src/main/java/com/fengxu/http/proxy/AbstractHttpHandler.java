@@ -82,7 +82,7 @@ abstract class AbstractHttpHandler implements IHttpHandler {
             }
             if (FxPath.class.isAssignableFrom(annotation.getClass())) {
                 // 该注解是FxPath
-                String sendUrl = httpProp.getSourceUrl().replace(String.format("{%s}",
+                String sendUrl = httpProp.getSendUrl().replace(String.format("{%s}",
                         ((FxPath) annotation).value()), String.valueOf(arg));
                 httpProp.setSendUrl(sendUrl);
                 isParse = true;

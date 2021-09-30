@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @Date 2021/3/19 15:27
  * @Version 1.0.0
  */
-public class HttpOkHandler extends AbstractHttpHandler {
+class HttpOkHandler extends AbstractHttpHandler {
 
 
     private HttpOkHandler() {

@@ -72,7 +72,7 @@ class HttpProp {
      * @Version 1.0.0
      */
     public void initProp() {
-        this.sendUrl = sourceUrl;
+        this.copyToSendUrl();
         this.params.clear();
         this.headers.clear();
         this.body = null;
@@ -108,7 +108,8 @@ class HttpProp {
      */
     public void printLogIfCan() {
         if (canOutLog) {
-            String log = String.format(" ===========>> \n Http(%s): %s \n header -> %s \n form -> %s \n body -> %s \n file -> %s \n ===========>>",
+            String log = String.format(" ===========>> \n Http(%s): %s \n header -> %s" +
+                            " \n form -> %s \n body -> %s \n file -> %s \n ===========>>",
                     fxHttp.method().name(), sendUrl, headers, params, body, fileProp);
             System.out.println(log);
         }
