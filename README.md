@@ -291,3 +291,8 @@ FxTest fxTest = new FxHttpMain.Builder()
         String s = fxTest.login("风珝", "123321");
 ```
 
+
+
+#### v0.2.3 更新日志-修复使用restful风格的bug
+
+在前面的版本中，如果您使用多级restful风格的api会导致只替换了最后一个参数的bug!此次版本更新修复了该bug！
