@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
@@ -18,6 +20,8 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.Proxy;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -154,26 +158,33 @@ class HttpOkHandler extends AbstractHttpHandler {
 
         // 解析文件参数
         if (httpProp.getFileProp().containFile()) {
+            MultipartBody.Builder requestBuilder = new MultipartBody.Builder();
             if (httpProp.getFileProp().getFile() != null) {
-                RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                        // 参数名
-                        .addFormDataPart(httpProp.getFileProp().getParamName(),
-                                // 文件名
-                                httpProp.getFileProp().getFilename(),
-                                // 文件的请求体
-                                RequestBody.create(httpProp.getFileProp().getFile(),
-                                        MediaType.parse("multipart/form-data")))
-                        .build();
-                httpProp.setBody(requestBody);
+                requestBuilder.setType(MultipartBody.FORM)
+                // 参数名
+                .addFormDataPart(httpProp.getFileProp().getParamName(),
+                        // 文件名
+                        httpProp.getFileProp().getFilename(),
+                        // 文件的请求体
+                        RequestBody.create(httpProp.getFileProp().getFile(),
+                                MediaType.parse("multipart/form-data")));
             }
             if (httpProp.getFileProp().getBytes() != null) {
-                RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                requestBuilder.setType(MultipartBody.FORM)
                         .addFormDataPart(httpProp.getFileProp().getParamName(),
                                 httpProp.getFileProp().getFilename(),
                                 RequestBody.create(httpProp.getFileProp().getBytes()
                                         , MediaType.parse("multipart/form-data")))
                         .build();
-                httpProp.setBody(requestBody);
+            }
+            // 或此时还有表单参数，一并加入到该请求体中
+            if (httpProp.getParams().size() > 0) {
+                for (Map.Entry<String, Object> entry : httpProp.getParams().entrySet()) {
+                    requestBuilder.addFormDataPart(entry.getKey(), String.valueOf(entry.getValue()));
+                }
+            }
+            if(requestBuilder != null){
+                httpProp.setBody(requestBuilder.build());
             }
         }
 

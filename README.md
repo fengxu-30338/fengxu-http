@@ -296,3 +296,9 @@ FxTest fxTest = new FxHttpMain.Builder()
 #### v0.2.3 更新日志-修复使用restful风格的bug
 
 在前面的版本中，如果您使用多级restful风格的api会导致只替换了最后一个参数的bug!此次版本更新修复了该bug！
+
+
+
+#### v0.2.3 更新日志 修复文件表单问题
+
+修复了在上传文件时，同时有其他表单参数时，不传递表单参数的bug
